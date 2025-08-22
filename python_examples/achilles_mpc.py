@@ -39,8 +39,10 @@ def standing_position():
     Return a reasonable default standing position for the Achilles humanoid.
     """
     return np.array([
-        1.0000, 0.0000, 0.0000, 0.0000,           # base orientation
-        0.0000, 0.0000, 0.9300,                   # base position
+        # 1.0000, 0.0000, 0.0000, 0.0000,           # base orientation
+        # 0.0000, 0.0000, 0.9300,                   # base position
+        0.0000, 0.0000, 0.0000, 1.0000,           # base orientation
+        0.0000, 0.0000, 0.6500,                   # base position
         0.0000, 0.0209,-0.5515, 1.0239,-0.4725,   # left leg
         0.0000, 0.0000, 0.0000, 0.0000,           # left arm
         0.0000,-0.0209,-0.3200, 0.9751,-0.6552,   # right leg
@@ -51,7 +53,8 @@ def create_optimizer():
     """
     Create a trajectory optimizer object that can be used for MPC.
     """
-    model_file = FindIdtoResource("idto/models/achilles/achilles.urdf")
+    # model_file = FindIdtoResource("../..idto/models/achilles/achilles.urdf")
+    model_file ="../../models/achilles/achilles_lowered_com_walking_hardware_obj.urdf"
 
     # Create the system diagram that the optimizer uses
     builder = DiagramBuilder()
@@ -101,7 +104,7 @@ def create_optimizer():
 
     # Set the solver parameters
     params = SolverParameters()
-    params.max_iterations = 1
+    params.max_iterations = 3
     params.scaling = True
     params.equality_constraints = False
     params.Delta0 = 1e1
@@ -181,7 +184,7 @@ class AchillesMPC(ModelPredictiveController):
 
         # Shift the nominal trajectory
         dt = self.optimizer.time_step()
-        vx = 0.2
+        vx = -0.2
         for i in range(self.num_steps + 1):
             q_nom[i][4] = q0[4] + vx * i * dt
             v_nom[i][4] = vx
@@ -191,7 +194,8 @@ class AchillesMPC(ModelPredictiveController):
 
 if __name__=="__main__":
     meshcat = StartMeshcat()
-    model_file = FindIdtoResource("idto/models/achilles/achilles.urdf")
+    # model_file = FindIdtoResource("../..idto/models/achilles/achilles.urdf")
+    model_file ="../../models/achilles/achilles_lowered_com_walking_hardware_obj.urdf"
 
     # Set up a Drake diagram for simulation
     builder = DiagramBuilder()

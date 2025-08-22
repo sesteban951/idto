@@ -59,7 +59,9 @@ def visualize_trajectory(q, time_step, model_file, meshcat=None):
     meshcat.PublishRecording()
 
 if __name__=="__main__":
-    model_file = FindIdtoResource("idto/models/achilles/achilles.urdf")
+    # model_file = FindIdtoResource("../..idto/models/achilles/achilles.urdf")
+    # model_file ="models/achilles/achilles.urdf"
+    model_file ="models/achilles/achilles_lowered_com_walking_hardware_obj.urdf"
 
     # Create the system diagram that the optimizer uses
     builder = DiagramBuilder()
@@ -77,8 +79,10 @@ if __name__=="__main__":
     nv = plant.num_velocities()
 
     q_stand = np.array([
-        1.0000, 0.0000, 0.0000, 0.0000,           # base orientation
-        0.0000, 0.0000, 0.9300,                   # base position
+        # 1.0000, 0.0000, 0.0000, 0.0000,           # base orientation
+        # 0.0000, 0.0000, 0.9300,                   # base position
+        0.0000, 0.0000, 0.0000, 1.0000,           # base orientation
+        0.0000, 0.0000, 0.6500,                   # base position
         0.0000, 0.0209,-0.5515, 1.0239,-0.4725,   # left leg
         0.0000, 0.0000, 0.0000, 0.0000,           # left arm
         0.0000,-0.0209,-0.3200, 0.9751,-0.6552,   # right leg
@@ -110,7 +114,7 @@ if __name__=="__main__":
     problem.Qf_q = 10.0 * np.copy(problem.Qq)
     problem.Qf_v = 1.0 * np.copy(problem.Qv)
 
-    base_vel = np.array([0.5, 0.0])  # vx, vy
+    base_vel = np.array([-0.5, 0.0])  # vx, vy
     q_sel = np.zeros(nq)
     q_sel[4:6] = base_vel
     v_nom = np.zeros(nv)
