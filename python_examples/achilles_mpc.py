@@ -184,10 +184,14 @@ class AchillesMPC(ModelPredictiveController):
 
         # Shift the nominal trajectory
         dt = self.optimizer.time_step()
-        vx = -0.2
+        vx = -0.4
+        vy = -0.1
         for i in range(self.num_steps + 1):
             q_nom[i][4] = q0[4] + vx * i * dt
             v_nom[i][4] = vx
+
+            q_nom[i][5] = q0[5] + vy * i * dt
+            v_nom[i][5] = vy
 
         self.optimizer.UpdateNominalTrajectory(q_nom, v_nom)
 
